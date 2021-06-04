@@ -1,37 +1,43 @@
-## Welcome to GitHub Pages
+![img fastify](https://www.fastify.io/images/fastify-logo-inverted.2180cc6b1919d47a.png)
 
-You can use the [editor on GitHub](https://github.com/tguthrie1765/cit281-lab4/edit/main/README.md) to maintain and preview the content for your website in Markdown files.
+In this lab I  initialized a Fastify Node.js web server. I also learned how to add a second route with query parameters. 
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+<br>
 
-### Markdown
+Here is the code from lab 4
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+```js
+// Require the Fastify framework and instantiate it
+const fastify = require("fastify")();
+// Handle GET verb for / route using Fastify
+// Note use of "chain" dot notation syntax
+fastify.get("/", (request, reply) => {
+  reply
+    .code(200)
+    .header("Content-Type", "text/html; charset=utf-8")
+    .send("<h1>Hello from Lab 4!</h1>");
+});
 
-```markdown
-Syntax highlighted code block
+// Route for /name
+fastify.get("/name", (request, reply) => {
+    const {first, last} = request.query;
+    
+    const name = first && last ? `${first} ${last}` : `Guest`;
+    reply
+      .code(200)
+      .header("Content-Type", "text/html; charset=utf-8")
+      .send(`<h1>Hello, ${name} </h1>`);
+  });
 
-# Header 1
-## Header 2
-### Header 3
 
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
+// Start server and listen to requests using Fastify
+const listenIP = "localhost";
+const listenPort = 8080;
+fastify.listen(listenPort, listenIP, (err, address) => {
+  if (err) {
+    console.log(err);
+    process.exit(1);
+  }
+  console.log(`Server listening on ${address}`);
+});
 ```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/tguthrie1765/cit281-lab4/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
